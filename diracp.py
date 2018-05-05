@@ -12,7 +12,7 @@ from scipy.optimize import newton_krylov
 
 import tools as t
 from tools import pauli0, paulix, pauliy, pauliz, mat1, mat2, mat3, mat4
-import diracpc2 as dc
+import dirac_c as dc
 
 
 def constructVDmat(Vn, dn):
@@ -27,7 +27,7 @@ def constructVDmat(Vn, dn):
     """
 
     if len(Vn[0]) is not len(dn[0]):
-        print "Error: potential and \Delta matrices don't match!"
+        print("Error: potential and \Delta matrices don't match!")
         return None
 
     numn = len(Vn[0])
@@ -93,8 +93,8 @@ def constructBdG(Vn, dn, kx, ky, verb=False, VDmat=None, psx=0., psy=0.):
         nmax = (numn-1)/2
 
     if verb:
-        print "Constructing BdG Hamiltonian with kx = " + str(kx) + \
-            ", ky = " + str(ky) + " and nmax = " + str(nmax) + "."
+        print("Constructing BdG Hamiltonian with kx = " + str(kx) + \
+            ", ky = " + str(ky) + " and nmax = " + str(nmax) + ".")
 
     # momentum dependency, diagonal in Bloch space
     kmat = kron(diag(arange(-nmax, nmax+1)*2*pi+kx), kron(pauliz, paulix)) + \
@@ -108,7 +108,7 @@ def constructBdG(Vn, dn, kx, ky, verb=False, VDmat=None, psx=0., psy=0.):
     m = kmat + VDmat[0] + VDmat[1]
 
     if not (conjugate(transpose(m)) - m < 1e-10).all():
-        print "Warning: Hamiltonian is not hermitian!"
+        print("Warning: Hamiltonian is not hermitian!")
 
     return m
 
@@ -377,20 +377,20 @@ def newtonitern(Vn, dn0, T, g, pmax, nbands=1, kx=1e-5, tol=1e-5, maxloops=30,
                 return delta
 
     if verb:
-        print "Calculating delta with Newton iteration with g=", g
+        print("Calculating delta with Newton iteration with g=", g)
 
     loopN = 0
     dn = dn0
     while True:
         if verb:
-            print "We're at loop nr", loopN
+            print("We're at loop nr", loopN)
         VDmat = constructVDmat(Vn, dn)
         dnnew = deltaintegralsymmetric(
             Vn, dn, T, g, pmax, nbands, kx, VDmat, p)
         err1 = sum(abs(dn[0]-dnnew[0]))/sum(abs(dnnew[0]))
         err2 = sum(abs(dn[1]-dnnew[1]))/sum(abs(dnnew[1]))
         if verb:
-            print "Max error is", max(err1, err2), "Tolerance is", tol
+            print("Max error is", max(err1, err2), "Tolerance is", tol)
         if max(err1, err2) < tol:
             if cache:
                 if not (beta < 0):
@@ -398,7 +398,7 @@ def newtonitern(Vn, dn0, T, g, pmax, nbands=1, kx=1e-5, tol=1e-5, maxloops=30,
             return dnnew
 
         elif loopN >= maxloops:
-            print "Maximum number of loops reached and solution was not found!"
+            print("Maximum number of loops reached and solution was not found!")
             return dnnew
         else:
             dn = dnnew
@@ -418,11 +418,11 @@ def krylovsolversymmetric(Vn, dn0, T, g, pmax, nbands=1, kx=1e-5, tol=1e-5,
                 return delta
 
     if verb:
-        print "Finding self-consistent delta with g =", g
+        print("Finding self-consistent delta with g =", g)
 
     def minfun(dng):
         if verb:
-            print "Iteration..."
+            print("Iteration...")
         dn = dng[:(2*nmax+1)]+1j*dng[(2*nmax+1):]
         VDmat = constructVDmat(Vn, [dn, dn])
         integral = deltaintegralsymmetric(
@@ -533,7 +533,7 @@ def loaddelta(g, T, beta, nm, p=[0.0, 0.0]):
         delta[0] = delta0[0]+delta0[1]*1j
         delta[1] = delta0[2]+delta0[3]*1j
     except IOError:
-        print "not found", fname
+        print("not found", fname)
         delta = delta0
         pass
     return delta

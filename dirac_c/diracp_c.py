@@ -1,12 +1,15 @@
 """
 """
 
+import os
 from scipy import *
 from numpy import ctypeslib
 
 
+dirname = os.path.dirname(__file__)
+
 bdglib = ctypeslib.load_library(
-    'bdgeq.so', "./")
+    'bdgeq.so', dirname)
 bdglib.constructBdG.restype = None
 bdglib.constructBdG.argtypes = [ctypeslib.ndpointer(int, flags='aligned, contiguous'),
                                 ctypeslib.ndpointer(
