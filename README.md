@@ -7,7 +7,8 @@ was used to produce the results in this article: https://arxiv.org/abs/1601.0450
 
 Most of the code is contained in `diracp.py` and `tools.py`. The code was initially for my personal use, which means that it is
 not extremely elegant and only some of it is documented. If you are interested in using or extending this code, you can ask
-me about it; otherwise my motivation to improve it after this point is quite low.
+me about it; otherwise my motivation to improve it after this point is quite low. The python part of the code is written
+for Python2.7 and doesn't seem to work on Python3.x. This would probably be easy to fix.
 
 Some examples on how to use the code are included:
 
